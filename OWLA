@@ -1,0 +1,52 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+df = pd.read_csv("variables.csv", sep = ",")
+a = df["a"].to_list()
+print(a)
+w = df["w"].to_list()
+v = df["v"].to_list()
+Beta = 0.6
+Abeta = 1 - Beta
+b = sorted(a, reverse=True)
+
+def WA(Values, Veights):
+    wav = []
+    for i in range(0, len(a)):
+        wav.append(a[i]*v[i])
+    return wav
+
+def OWA(Values, Weights):
+    owav = []
+    for i in range(0, len(a)):
+        owav.append(b[i]*w[i])
+    return owav
+
+
+def OWLA(Values, Weights):
+    owlav = []
+    for i in range(0, len(a)):
+        c = np.log(b)
+        owlav.append(c[i]*w[i])
+    return owlav
+
+
+WAV = sum(WA(a,v))
+OWAV = sum(OWA(a,w))
+OWLAV = np.exp(sum(OWLA(a,w)))
+
+print(WA(a,v), "WA =", WAV)
+print(OWA(a,w),"OWA =", OWAV)
+print(OWLA(a,w), "OWLA =", OWLAV)
+  
+# Creating vectors X and Y
+x = np.linspace(1, len(a), num=len(a))
+# Create the plot
+plt.plot(x,WA(a,v),label='WA')
+plt.plot(x,OWA(a,w),label='OWA')
+plt.plot(x,OWLA(a,w),label='OWLA')
+
+# Show the plot
+plt.legend()
+plt.show()
